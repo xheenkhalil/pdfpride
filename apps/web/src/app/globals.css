@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #000000;
+}
+
+* {
+  border-radius: 0px !important;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sharp high-contrast UI elements */
+input, select, textarea, button {
+  border-radius: 0px !important;
+}
+
+::selection {
+  background-color: #000000;
+  color: #FFFFFF;
+}

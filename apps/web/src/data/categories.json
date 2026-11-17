@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Pdf Organization & Management",
+    "slug": "pdf-organization-management"
+  },
+  {
+    "id": 2,
+    "name": "Pdf Conversion",
+    "slug": "pdf-conversion"
+  },
+  {
+    "id": 3,
+    "name": "Pdf Compression & Optimization",
+    "slug": "pdf-compression-optimization"
+  },
+  {
+    "id": 4,
+    "name": "Pdf Editing",
+    "slug": "pdf-editing"
+  },
+  {
+    "id": 5,
+    "name": "Pdf Security & Protection",
+    "slug": "pdf-security-protection"
+  },
+  {
+    "id": 6,
+    "name": "Pdf Forms",
+    "slug": "pdf-forms"
+  },
+  {
+    "id": 7,
+    "name": "Ocr & Document Intelligence",
+    "slug": "ocr-document-intelligence"
+  },
+  {
+    "id": 8,
+    "name": "Image Studio",
+    "slug": "image-studio"
+  },
+  {
+    "id": 9,
+    "name": "Word Document Utilities",
+    "slug": "word-document-utilities"
+  },
+  {
+    "id": 10,
+    "name": "Excel & Spreadsheet Utilities",
+    "slug": "excel-spreadsheet-utilities"
+  },
+  {
+    "id": 11,
+    "name": "Powerpoint Utilities",
+    "slug": "powerpoint-utilities"
+  },
+  {
+    "id": 12,
+    "name": "General File Utilities",
+    "slug": "general-file-utilities"
+  },
+  {
+    "id": 13,
+    "name": "Text & Productivity Utilities",
+    "slug": "text-productivity-utilities"
+  },
+  {
+    "id": 14,
+    "name": "Batch Processing",
+    "slug": "batch-processing"
+  },
+  {
+    "id": 15,
+    "name": "Cloud Workspace & File Management",
+    "slug": "cloud-workspace-file-management"
+  },
+  {
+    "id": 16,
+    "name": "Document Sharing",
+    "slug": "document-sharing"
+  },
+  {
+    "id": 17,
+    "name": "User Account & Settings",
+    "slug": "user-account-settings"
+  },
+  {
+    "id": 18,
+    "name": "Administration & Platform Management",
+    "slug": "administration-platform-management"
+  },
+  {
+    "id": 19,
+    "name": "Subscription & Usage Management",
+    "slug": "subscription-usage-management"
+  },
+  {
+    "id": 20,
+    "name": "Advanced Platform Features",
+    "slug": "advanced-platform-features"
+  }
+]

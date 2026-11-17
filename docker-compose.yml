@@ -1,0 +1,103 @@
+services:
+  # PostgreSQL 16 Relational Database (ACID metadata, RLS, workspaces)
+  postgres:
+    image: postgres:16-alpine
+    container_name: pdfpride_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pdfpride}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pdfpride_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-pdfpride_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pdfpride -d pdfpride_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis 7 In-Memory Task Broker & State Cache
+  redis:
+    image: redis:7-alpine
+    container_name: pdfpride_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Backend Server API (FastAPI)
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: pdfpride_api
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-pdfpride}:${POSTGRES_PASSWORD:-pdfpride_secret}@postgres:5432/${POSTGRES_DB:-pdfpride_db}
+      REDIS_URL: redis://redis:6379/0
+      STORAGE_DRIVER: local
+      LOCAL_STORAGE_DIR: /data/storage
+      SECRET_KEY: ${SECRET_KEY:-pdfpride_insecure_dev_secret_key_change_in_production}
+    volumes:
+      - ./apps/api:/app/apps/api
+      - ./packages:/app/packages
+      - shared_storage:/data/storage
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Dedicated Celery Processing Worker Pool
+  worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: pdfpride_worker
+    command: celery -A apps.api.app.workers.celery_app.celery_app worker --loglevel=info -c 4
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-pdfpride}:${POSTGRES_PASSWORD:-pdfpride_secret}@postgres:5432/${POSTGRES_DB:-pdfpride_db}
+      REDIS_URL: redis://redis:6379/0
+      STORAGE_DRIVER: local
+      LOCAL_STORAGE_DIR: /data/storage
+    volumes:
+      - ./apps/api:/app/apps/api
+      - ./packages:/app/packages
+      - shared_storage:/data/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Frontend Web Client (Next.js 14+)
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: pdfpride_web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
+      INTERNAL_API_URL: http://api:8000/api/v1
+    ports:
+      - "3100:3000"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  redis_data:
+  shared_storage:
